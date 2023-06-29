@@ -16,7 +16,7 @@ public class InfoScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("addItem", 5 , 5);
+        //InvokeRepeating("addItem", 5 , 5);
         moneyText.text = money.ToString();
         addMoney(10);
         updateStage();

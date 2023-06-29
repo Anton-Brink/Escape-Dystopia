@@ -57,6 +57,8 @@ public class Enemy : MonoBehaviour
         foreach (var card in sceneManagerScript.cards)
         {
             CardUIScript cardScript = card.GetComponent<CardUIScript>();
+            Debug.Log("loop");
+            Debug.Log(cardScript.cardName);
             if (cardScript.cardActive) return cardScript;
         }
         return null;
