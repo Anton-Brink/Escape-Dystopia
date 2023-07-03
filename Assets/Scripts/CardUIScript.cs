@@ -44,8 +44,7 @@ public class CardUIScript : MonoBehaviour
 
     private void deActivateOtherCards()
     {
-        GameObject[] cards = sceneManagerScript.cards;
-        foreach (GameObject card in cards)
+        foreach (GameObject card in sceneManagerScript.cards)
         {
             CardUIScript cardScript = card.GetComponent<CardUIScript>();
             if (cardScript.cardActive) cardScript.cardActive = false;
