@@ -13,11 +13,15 @@ public class CardUIScript : MonoBehaviour
     public TextMeshProUGUI cardPowerCost;
     public TextMeshProUGUI cardDamage;
     public Image cardImage;
+    public List<Card> usedCards = new List<Card>();
 
     //card functionality variables
     GameObject sceneManager;
     SceneManagerScript sceneManagerScript;
     public bool cardActive = false;
+
+    //player relevant variables
+    private PlayerScript playerScript;
 
     void Start()
     {
@@ -30,16 +34,34 @@ public class CardUIScript : MonoBehaviour
         //card functionality
         sceneManager = GameObject.Find("SceneManager");
         sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
+
+        playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
     }
 
     private void OnMouseDown()
     {
-        Debug.Log("Click");
-        deActivateOtherCards();
-        cardActive = true;
+        if (usedCards.IndexOf(card) < 0)
+        {
+            if (playerScript.characterPower >= card.powerCost) cardActive = true;
+            else Debug.Log("Not Enough Power To Use Card");
+        }
+        else Debug.Log("Already used card");
     }
 
+    public void DeactivateCard() 
+    {
+        Debug.Log(card);
+        if(usedCards.IndexOf(card) < 0) usedCards.Add(card);
+        cardActive = false;
+    }
 
+    public void updateCard() 
+    {
+        cardName.text = card.cardName;
+        cardPowerCost.text = card.powerCost.ToString();
+        cardDamage.text = card.cardDamage.ToString();
+        cardImage.sprite = card.cardImage;
+    }
 
 
     private void deActivateOtherCards()
