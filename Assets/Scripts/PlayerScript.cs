@@ -9,25 +9,34 @@ using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
+    //playerstats
     private int characterHealth = 100;
     private int characterMaxHealth = 100;
     public int characterPower = 0;
     private int characterMaxPower = 5;
+
+    //player stat UI
     public Slider healthSlider;
     public Rect effectsContainer;
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerHealthText;
     public TextMeshProUGUI playerPowerText;
-    private int cardLimit = 1;
+
+    //playerUI
+    private SpriteRenderer playerSpriteRenderer;
+
+    //player card management
+    private int technoCardLimit = 2;
+    private int forceCardLimit = 1;
+    private int gadgetCardLimit = 1;
     public GameObject[] playerHands;
     public String[] playerSets = {"Techno Set","Force Set","Gadget Set"};
     private int setNumber = -1;
-    private SpriteRenderer playerSpriteRenderer;
     public List<Card> technoCards = new List<Card>();
     public List<Card> forceCards = new List<Card>();
     public List<Card> gadgetCards = new List<Card>();
 
-
+    //outside scripts
     public GameObject sceneManager;
     SceneManagerScript sceneManagerScript;
 
@@ -35,8 +44,9 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //set manager script so functions can be accessed
         sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
-        setHand();
+        //set player stats and UI info
         healthSlider.maxValue = characterMaxHealth;
         healthSlider.value = characterHealth;
         playerHealthText.text = characterHealth.ToString();
@@ -72,22 +82,25 @@ public class PlayerScript : MonoBehaviour
         {
             case 0:
                 playerSpriteRenderer.color = Color.red;
-                setCards(technoCards);
+                setHand(technoCardLimit);
+                setCards(technoCards, technoCardLimit);
                 break;
             case 1:
                 playerSpriteRenderer.color = Color.cyan;
-                setCards(forceCards);
+                setHand(forceCardLimit);
+                setCards(forceCards, forceCardLimit);
                 break;
             case 2:
                 playerSpriteRenderer.color = Color.yellow;
-                setCards(gadgetCards);
+                setHand(gadgetCardLimit);
+                setCards(gadgetCards, gadgetCardLimit);
                 break;
 
 
         }
     }
 
-    private void setHand()
+    private void setHand(int cardLimit)
     {
         if (cardLimit <= 5 && cardLimit >=1)
         {
@@ -97,6 +110,7 @@ public class PlayerScript : MonoBehaviour
             }
 
             playerHands[cardLimit - 1].SetActive(true);
+            sceneManagerScript.cards.Clear();
             foreach (Transform child in playerHands[cardLimit - 1].transform)
             {
                 if (child.gameObject)
@@ -107,7 +121,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void setCards(List<Card> setCards)
+    private void setCards(List<Card> setCards, int cardLimit)
     {
         int currentCard = cardLimit;
         foreach (Transform child in playerHands[cardLimit - 1].transform)
