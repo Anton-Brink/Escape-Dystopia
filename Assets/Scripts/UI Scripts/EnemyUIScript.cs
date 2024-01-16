@@ -58,7 +58,7 @@ public class EnemyUIScript : MonoBehaviour
                 enemyHealthText.text = enemy.enemyHealth.ToString() + "/" + healthSlider.maxValue.ToString();
             }
             activeCard.DeactivateCard();
-            playerScript.updatePower(activeCard.card.powerCost);
+            playerScript.setPower(playerScript.getPower() - activeCard.card.powerCost);
         }
     }
 

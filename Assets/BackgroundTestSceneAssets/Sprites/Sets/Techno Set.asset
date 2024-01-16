@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d5d2a395947343489428a1244d544f9, type: 3}
+  m_Name: Techno Set
+  m_EditorClassIdentifier: 
+  setName: Techno
+  setDescription: Used to deal damage and Effects with electronics
+  setImage: {fileID: 21300000, guid: ce6ffadb73bd79947b815583d194b4d0, type: 3}
+  setOptions:
+  - +1 size
+  - +10 percentDamage
+  - +10 flatDamage
+  - -10% cooldown
+  setCards:
+  - {fileID: 11400000, guid: 01193246d3286f0488033b157fa7be1f, type: 2}
+  - {fileID: 11400000, guid: d5db28bd6c5fb5349ab317e68223fab2, type: 2}
+  - {fileID: 11400000, guid: 67c587727bb4c4c419bb31121af0cb14, type: 2}
+  - {fileID: 11400000, guid: 810afa8e63855c448aa0e9335bc9fd0a, type: 2}
+  - {fileID: 11400000, guid: 9b5b71ccd5502144cb2bbdd19fc46758, type: 2}
+  - {fileID: 11400000, guid: 1b49fd50bc014c642a58cccb1003f14a, type: 2}
+  cardLimit: 1
+  components: {r: 0, g: 1, b: 0.97788215, a: 1}
