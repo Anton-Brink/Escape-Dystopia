@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,8 +23,9 @@ public class SetManager : MonoBehaviour
 
     public void switchPlayerSet()
     {
-        if(setNumber < 0 || setNumber > 2) previousCardLimit = -1;//if set number is out of the valid range set the previous card limit to 0
-        else previousCardLimit = playerSets[setNumber].cardLimit;
+        Debug.Log("setNumber: " + setNumber);
+        if(setNumber < 0 || setNumber > 2) previousCardLimit = 0;//if set number is out of the valid range set the previous card limit to 0
+        else previousCardLimit = playerSets[setNumber].cardLimit - 1;
 
         if (setNumber == 2) setNumber = 0;
         else setNumber++;
@@ -44,6 +46,9 @@ public class SetManager : MonoBehaviour
         //make sure set has valid cardLimit set
         if (cardLimit <= 5 && cardLimit >= 1)
         {
+            Debug.Log("Previous Card Limit: " + previousCardLimit);
+
+            Debug.Log("Player Hands: " + playerHands);
             //set the previous active player hand to inactive
             if (previousCardLimit != -1)
             {

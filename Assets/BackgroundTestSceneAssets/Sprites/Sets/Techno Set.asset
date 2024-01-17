@@ -29,3 +29,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b49fd50bc014c642a58cccb1003f14a, type: 2}
   cardLimit: 1
   components: {r: 0, g: 1, b: 0.97788215, a: 1}
+  setUnlocked: 1

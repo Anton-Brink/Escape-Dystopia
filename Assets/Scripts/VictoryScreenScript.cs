@@ -87,6 +87,7 @@ public class VictoryScreenScript : MonoBehaviour
         setManager = GameObject.Find("SetManager").GetComponent<SetManager>(); 
         //get random set to improve
         System.Random rand = new System.Random();
+        
         randSet = setManager.getPlayerSets()[rand.Next(0, setManager.getPlayerSets().Length)];
         componentText.text = randSet.name;
         componentImage.sprite = randSet.setImage;
