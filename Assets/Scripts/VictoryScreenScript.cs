@@ -34,6 +34,8 @@ public class VictoryScreenScript : MonoBehaviour
     private Stat randStat;
     private Set randSet;
     SetManager setManager;
+    ItemManager itemManager;
+    
 
 
     private GameObject selectedElement;
@@ -42,10 +44,13 @@ public class VictoryScreenScript : MonoBehaviour
     // used to handle the victory screen interaction such as character selection and closing it
     public void confirmSelection()
     {
+        Debug.Log(selectedElement);
         switch (selectedElement.name)
         {
             case "Item":
                 Debug.Log(randItem);
+                itemManager = GameObject.Find("Item Canvas").GetComponent<ItemManager>();
+                itemManager.addItem(randItem);
                 break;
             case "Component":
                 //for now only do card limit, can add other effects later
@@ -93,17 +98,31 @@ public class VictoryScreenScript : MonoBehaviour
         componentImage.sprite = randSet.setImage;
         componentGameObject.GetComponent<TooltipTrigger>().header = randSet.name;
         //get random item to add
-        randItem = playerScript.playerItems[rand.Next(0, playerScript.playerItems.Count)];
+
+        string[] scriptableItemObjects = AssetDatabase.FindAssets("t:Item", new[] { "Assets/BackgroundTestSceneAssets/Sprites/Items" });
+        int itemCount = scriptableItemObjects.Length;
+        Debug.Log(itemCount);
+        Item[] items = new Item[itemCount];
+        for (int i = 0; i < itemCount; i++)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(scriptableItemObjects[i]);
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(assetPath);
+            if (item != null)
+            {
+                items[i] = item;
+            }
+        }
+        randItem = items[rand.Next(0, items.Length)];
         itemText.text = randItem.name;
         itemGameObject.GetComponent<TooltipTrigger>().header = randItem.name;
         itemGameObject.GetComponent<TooltipTrigger>().body = randItem.itemEffect;
         //get random stats to buff
-        string[] scriptableObjects = AssetDatabase.FindAssets("t:Stat", new[] { "Assets/BackgroundTestSceneAssets/Sprites/Stats" });
-        int statCount = scriptableObjects.Length;
+        string[] scriptableStatObjects = AssetDatabase.FindAssets("t:Stat", new[] { "Assets/BackgroundTestSceneAssets/Sprites/Stats" });
+        int statCount = scriptableStatObjects.Length;
         Stat[] stats = new Stat[statCount];
         for (int i = 0; i < statCount; i++)
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(scriptableObjects[i]);
+            string assetPath = AssetDatabase.GUIDToAssetPath(scriptableStatObjects[i]);
             Stat stat = AssetDatabase.LoadAssetAtPath<Stat>(assetPath);
             if (stat != null)
             {
