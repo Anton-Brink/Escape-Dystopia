@@ -10,4 +10,5 @@ public class Item : ScriptableObject
     public string itemEffect = "";
     public Sprite itemImage;
     public string runType = "";
+    public int uses = -1;
 }

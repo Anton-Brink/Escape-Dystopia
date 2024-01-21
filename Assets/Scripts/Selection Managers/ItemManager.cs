@@ -21,15 +21,25 @@ public class ItemManager : MonoBehaviour
         
     }
 
-
-    public void addOnceOffItem(Item item) 
+    //ran at the start of each stage and when entering new "zone" to remove items that should be removed after a certain event takes place
+    public void updateItems()
     {
-        //create instance of item and add it to array
-
+    
     }
 
-    public void addPerTurnItem(Item item) 
+    // add item to top of screen and to player items so it can be used or viewed
+    public void addItem(Item item) 
     {
-        //create instance of item and add it to array
+        
+    }
+    // check which items have a per turn effect and run them
+    public void applyPerTurnItemEffects()
+    {
+        
+    }
+    // use consumable item and remove from inventory
+    public void applyConsumableItemEffect() 
+    {
+        //apply code
     }
 }

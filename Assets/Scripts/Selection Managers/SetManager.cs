@@ -46,9 +46,6 @@ public class SetManager : MonoBehaviour
         //make sure set has valid cardLimit set
         if (cardLimit <= 5 && cardLimit >= 1)
         {
-            Debug.Log("Previous Card Limit: " + previousCardLimit);
-
-            Debug.Log("Player Hands: " + playerHands);
             //set the previous active player hand to inactive
             if (previousCardLimit != -1)
             {
@@ -76,11 +73,6 @@ public class SetManager : MonoBehaviour
             //set the hexagon card ui script values
             setUsableCards(playerSets[setNumber].setCards, playerSets[setNumber].cardLimit);
         }
-    }
-
-    public void addItem()
-    {
-        //add current random available item
     }
 
     private void setUsableCards(Card[] setCards, int cardLimit)

@@ -45,7 +45,7 @@ public class VictoryScreenScript : MonoBehaviour
         switch (selectedElement.name)
         {
             case "Item":
-
+                Debug.Log(randItem);
                 break;
             case "Component":
                 //for now only do card limit, can add other effects later
