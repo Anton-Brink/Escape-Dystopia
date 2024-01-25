@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5331f2759696e4d4c91e85766d48df3c, type: 3}
   m_Name: CVE
   m_EditorClassIdentifier: 
-  cardDamage: 8
+  cardDamage: 20
   damageType: single
   cardImage: {fileID: 0}
   powerCost: 4

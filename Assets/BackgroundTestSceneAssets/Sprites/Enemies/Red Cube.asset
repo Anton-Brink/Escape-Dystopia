@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 775ed70f7a6e216489e4b2ffa245e2ef, type: 3}
   m_Name: Red Cube
   m_EditorClassIdentifier: 
-  enemyHealth: 13
+  enemyHealth: 20
   enemyDamage: 5
   enemyName: Red Cube

@@ -7,43 +7,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : Subject
 {
+    //playerstats
     private int characterHealth = 100;
     private int characterMaxHealth = 100;
-    public int characterPower = 0;
+    private int characterPower = 0;
     private int characterMaxPower = 5;
-    public Slider healthSlider;
-    public Rect effectsContainer;
-    public TextMeshProUGUI playerName;
-    public TextMeshProUGUI playerHealthText;
-    public TextMeshProUGUI playerPowerText;
-    private int cardLimit = 1;
-    public GameObject[] playerHands;
-    public String[] playerSets = {"Techno Set","Force Set","Gadget Set"};
-    private int setNumber = -1;
+    private int baseCharacterMaxPower = 5;
+
+    //playerSprite
     private SpriteRenderer playerSpriteRenderer;
-    public List<Card> technoCards = new List<Card>();
-    public List<Card> forceCards = new List<Card>();
-    public List<Card> gadgetCards = new List<Card>();
 
-
-    public GameObject sceneManager;
-    SceneManagerScript sceneManagerScript;
-
+    //player items
+    public List<Item> playerItems = new List<Item>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
-        setHand();
-        healthSlider.maxValue = characterMaxHealth;
-        healthSlider.value = characterHealth;
-        playerHealthText.text = characterHealth.ToString();
-        setPower();
-        playerName.text = "Twiggymocha";
+        //set player stats and UI info
+        setPower(characterMaxPower);
         playerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        switchPlayerSet();
     }
 
     // Update is called once per frame
@@ -52,79 +36,69 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    public void setPower() 
+    //getters and setters below
+    public void setPower(int power)
     {
-        characterPower = characterMaxPower;
-        playerPowerText.text = characterPower.ToString();
-    }
-    public void updatePower(int PowerCost) 
-    {
-        characterPower-=PowerCost;
-        playerPowerText.text = characterPower.ToString();
+        characterPower = power;
+        NotifyStatObservers(power, "power");
     }
 
-    public void switchPlayerSet()
+    public int getPower()
     {
-        if (setNumber == 2) setNumber = 0;
-        else setNumber++;
-        if(setNumber < 0 || setNumber > 2) setNumber = 0;
-        switch (setNumber) 
-        {
-            case 0:
-                playerSpriteRenderer.color = Color.red;
-                setCards(technoCards);
-                break;
-            case 1:
-                playerSpriteRenderer.color = Color.cyan;
-                setCards(forceCards);
-                break;
-            case 2:
-                playerSpriteRenderer.color = Color.yellow;
-                setCards(gadgetCards);
-                break;
-
-
-        }
+        return characterPower;
     }
 
-    private void setHand()
+    public void setBasePower(int power)
     {
-        if (cardLimit <= 5 && cardLimit >=1)
-        {
-            foreach (var playerHand in playerHands) 
-            {
-                playerHand.SetActive(false);
-            }
-
-            playerHands[cardLimit - 1].SetActive(true);
-            foreach (Transform child in playerHands[cardLimit - 1].transform)
-            {
-                if (child.gameObject)
-                {
-                    sceneManagerScript.cards.Add(child.gameObject);
-                }
-            }
-        }
+        baseCharacterMaxPower = power;
     }
 
-    private void setCards(List<Card> setCards)
+    public int getBasePower()
     {
-        int currentCard = cardLimit;
-        foreach (Transform child in playerHands[cardLimit - 1].transform)
-        {
-            currentCard--;
-            CardUIScript cardScript = child.gameObject.GetComponent<CardUIScript>();
-            if (cardScript != null)
-            {
-                cardScript.card = setCards[currentCard];
-                cardScript.updateCard();
-            }
-        }
+        return baseCharacterMaxPower;
     }
-    public void reduceHealth(int reductionAmount) 
+    public int getMaxHealth()
     {
-        characterHealth -= reductionAmount;
-        healthSlider.value = characterHealth;
-        playerHealthText.text = characterHealth.ToString();
+        return characterMaxHealth;
     }
+
+    public void setMaxHealth(int maxHealth)
+    {
+        characterMaxHealth = maxHealth;
+        NotifyStatObservers(maxHealth, "maxHealth");
+    }
+    public int getHealth()
+    {
+        return characterHealth;
+    }
+    public void setHealth(int health)
+    {
+        characterHealth = health;
+        NotifyStatObservers(health, "health");
+    }
+
+    public int getMaxPower() 
+    {
+        return characterMaxPower;
+    }
+
+    public void setMaxPower(int maxPower)
+    { 
+        characterMaxPower = maxPower;
+    }
+
+    public SpriteRenderer getPlayerSpriteRenderer()
+    {
+        return playerSpriteRenderer;
+    }
+
+    public void setPlayerSpriteRenderer(SpriteRenderer spriteRenderer) 
+    {
+        playerSpriteRenderer = spriteRenderer;
+    }
+
+    // observer stuff
+
+
+
 }

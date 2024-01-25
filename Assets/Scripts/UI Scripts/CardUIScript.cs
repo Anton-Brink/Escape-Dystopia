@@ -13,16 +13,15 @@ public class CardUIScript : MonoBehaviour
     public TextMeshProUGUI cardPowerCost;
     public TextMeshProUGUI cardDamage;
     public Image cardImage;
-    public List<Card> usedCards = new List<Card>();
 
     //card functionality variables
-    GameObject sceneManager;
     SceneManagerScript sceneManagerScript;
     public bool cardActive = false;
 
     //player relevant variables
     private PlayerScript playerScript;
 
+    //set visible card information and get scenemanager and player scripts
     void Start()
     {
         //card display
@@ -32,29 +31,29 @@ public class CardUIScript : MonoBehaviour
         cardImage.sprite = card.cardImage;
         
         //card functionality
-        sceneManager = GameObject.Find("SceneManager");
-        sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
-
+        sceneManagerScript = GameObject.Find("SceneManager").GetComponent<SceneManagerScript>();
         playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
     }
 
+    //check whether card has been used and whether user has enough power to use the card
     private void OnMouseDown()
     {
-        if (usedCards.IndexOf(card) < 0)
+        if (sceneManagerScript.usedCards.IndexOf(card) < 0)
         {
-            if (playerScript.characterPower >= card.powerCost) cardActive = true;
+            if (playerScript.getPower() >= card.powerCost) cardActive = true;
             else Debug.Log("Not Enough Power To Use Card");
         }
         else Debug.Log("Already used card");
     }
 
+    // check whether the card is in the usedCards array otherwise add it and deactivate the card
     public void DeactivateCard() 
     {
-        Debug.Log(card);
-        if(usedCards.IndexOf(card) < 0) usedCards.Add(card);
+        if(sceneManagerScript.usedCards.IndexOf(card) < 0) sceneManagerScript.usedCards.Add(card);
         cardActive = false;
     }
 
+    //set visible card values
     public void updateCard() 
     {
         cardName.text = card.cardName;
@@ -63,15 +62,4 @@ public class CardUIScript : MonoBehaviour
         cardImage.sprite = card.cardImage;
     }
 
-
-    private void deActivateOtherCards()
-    {
-        foreach (GameObject card in sceneManagerScript.cards)
-        {
-            CardUIScript cardScript = card.GetComponent<CardUIScript>();
-            if (cardScript.cardActive) cardScript.cardActive = false;
-        }
-    }
-
-    // Update is called once per frame
 }
