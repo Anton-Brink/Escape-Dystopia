@@ -14,6 +14,7 @@ public class PlayerScript : Subject
     private int characterMaxHealth = 100;
     private int characterPower = 0;
     private int characterMaxPower = 5;
+    private int baseCharacterMaxPower = 5;
 
     //playerSprite
     private SpriteRenderer playerSpriteRenderer;
@@ -45,6 +46,16 @@ public class PlayerScript : Subject
     public int getPower()
     {
         return characterPower;
+    }
+
+    public void setBasePower(int power)
+    {
+        baseCharacterMaxPower = power;
+    }
+
+    public int getBasePower()
+    {
+        return baseCharacterMaxPower;
     }
     public int getMaxHealth()
     {

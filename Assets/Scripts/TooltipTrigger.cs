@@ -13,6 +13,12 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler,IPointerExitHa
         TooltipSystem.Show(body, header);
     }
 
+    public void removeTooltip()
+    {
+        gameObject.SetActive(false);
+        TooltipSystem.Hide();
+    }
+
 
     public void OnPointerExit(PointerEventData eventData)
     {

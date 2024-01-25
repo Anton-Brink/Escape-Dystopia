@@ -25,7 +25,7 @@ public class SetManager : MonoBehaviour
     {
         Debug.Log("setNumber: " + setNumber);
         if(setNumber < 0 || setNumber > 2) previousCardLimit = 0;//if set number is out of the valid range set the previous card limit to 0
-        else previousCardLimit = playerSets[setNumber].cardLimit - 1;
+        else previousCardLimit = playerSets[setNumber].cardLimit - 1; //-1 because you have to subtract once for the previous card
 
         if (setNumber == 2) setNumber = 0;
         else setNumber++;
@@ -47,9 +47,11 @@ public class SetManager : MonoBehaviour
         if (cardLimit <= 5 && cardLimit >= 1)
         {
             //set the previous active player hand to inactive
-            if (previousCardLimit != -1)
+            Debug.Log(previousCardLimit);
+            if (previousCardLimit >= 1)
             {
-                playerHands[previousCardLimit].SetActive(false);
+                int disableIndex = previousCardLimit - 1;
+                playerHands[disableIndex].SetActive(false);
             }
             else
             {

@@ -7446,6 +7446,7 @@ MonoBehaviour:
   VictoryMenu: {fileID: 124039916}
   cardCanvas: {fileID: 1890584899}
   usedCards: []
+  itemManager: {fileID: 2037451543}
 --- !u!4 &827769444
 Transform:
   m_ObjectHideFlags: 0
@@ -17564,7 +17565,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee383313d02ce52478ba1fac5d830233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerItems: []
+  player: {fileID: 5484340960500103206}
+  setManager: {fileID: 505355304}
 --- !u!1 &2042036211
 GameObject:
   m_ObjectHideFlags: 0
