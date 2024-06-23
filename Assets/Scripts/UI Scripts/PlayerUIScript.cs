@@ -13,16 +13,20 @@ public class PlayerUIScript : MonoBehaviour, StatObserver
     public TextMeshProUGUI playerHealthText;
     public TextMeshProUGUI playerPowerText;
     public TextMeshProUGUI playerMaxHealthText; // this should include a slash and space
-    [SerializeField] Subject subject;
+    [SerializeField] private Subject subject;
 
+    private void Awake()
+    {
+        if (PlayerScript.Instance == null)
+        {
+            Debug.LogError("PlayerScript instance is not initialized. Make sure PlayerScript is in the scene and initialized.");
+            return;
+        }
+        subject = PlayerScript.Instance;
+    }
     private void Start()
     {
-        PlayerScript playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-        healthSlider.maxValue = playerScript.getMaxHealth();
-        playerMaxHealthText.text = " / " + healthSlider.maxValue.ToString();
-        healthSlider.value = playerScript.getHealth();
-        playerHealthText.text = playerScript.getHealth().ToString();
-        playerName.text = "Twiggymocha";
+        setPlayerStats();
     }
 
     public void statChange(int changeAmount, string statName)
@@ -45,11 +49,46 @@ public class PlayerUIScript : MonoBehaviour, StatObserver
 
     private void OnEnable()
     {
-        subject.AddStatObserver(this);
+        if (subject != null)
+        {
+            Debug.Log("Stat Observer Added");
+            subject.AddStatObserver(this);
+        }
     }
 
     private void OnDisable()
     {
-        subject.RemoveStatObserver(this);
+        if (subject != null)
+        {
+            subject.RemoveStatObserver(this);
+        }
+
+    }
+    private void setPlayerStats()
+    {
+        if (PlayerPrefs.HasKey("maxHealth"))
+        {
+            healthSlider.maxValue = PlayerPrefs.GetInt("maxHealth"); ;
+            playerMaxHealthText.text = " / " + healthSlider.maxValue.ToString();
+        }
+        else
+        {
+            healthSlider.maxValue = 100;
+            playerMaxHealthText.text = " / " + healthSlider.maxValue.ToString();
+        }
+
+        if (PlayerPrefs.HasKey("health"))
+        {
+            healthSlider.value = PlayerPrefs.GetInt("health");
+            playerHealthText.text = PlayerPrefs.GetInt("health").ToString();
+        }
+        else
+        {
+            healthSlider.value = 100;
+            playerHealthText.text = healthSlider.value.ToString();
+        }
+
+        if (PlayerPrefs.HasKey("playerName")) healthSlider.value = PlayerPrefs.GetInt("health");
+        else playerName.text = "Twiggymocha";
     }
 }

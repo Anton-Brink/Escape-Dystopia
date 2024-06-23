@@ -16,5 +16,7 @@ MonoBehaviour:
   itemEffect: Decrease max health by 10, but gain 1 component for each set (if max
     of 6 has not been reached)
   itemImage: {fileID: 21300000, guid: 78faaa8293bc2f147ba947fd43b28ab2, type: 3}
+  imagePath: Assets/BackgroundTestSceneAssets/Assets/Images and Icons/Items/Bad Heart
+    Icon.png
   runType: consumableItem
   uses: 1

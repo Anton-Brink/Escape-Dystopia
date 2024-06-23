@@ -15,7 +15,7 @@ public class CardUIScript : MonoBehaviour
     public Image cardImage;
 
     //card functionality variables
-    SceneManagerScript sceneManagerScript;
+    CardManager cardManagerScript;
     public bool cardActive = false;
 
     //player relevant variables
@@ -29,17 +29,19 @@ public class CardUIScript : MonoBehaviour
         cardPowerCost.text = card.powerCost.ToString();
         cardDamage.text = card.cardDamage.ToString();
         cardImage.sprite = card.cardImage;
-        
+
         //card functionality
-        sceneManagerScript = GameObject.Find("SceneManager").GetComponent<SceneManagerScript>();
+        cardManagerScript = GameObject.Find("CardManager").GetComponent<CardManager>();
         playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
     }
 
     //check whether card has been used and whether user has enough power to use the card
     private void OnMouseDown()
     {
-        if (sceneManagerScript.usedCards.IndexOf(card) < 0)
+        if (cardManagerScript.usedCards.IndexOf(card) < 0)
         {
+            Debug.Log(playerScript.getPower());
+            Debug.Log(card.powerCost);
             if (playerScript.getPower() >= card.powerCost) cardActive = true;
             else Debug.Log("Not Enough Power To Use Card");
         }
@@ -49,7 +51,7 @@ public class CardUIScript : MonoBehaviour
     // check whether the card is in the usedCards array otherwise add it and deactivate the card
     public void DeactivateCard() 
     {
-        if(sceneManagerScript.usedCards.IndexOf(card) < 0) sceneManagerScript.usedCards.Add(card);
+        if(cardManagerScript.usedCards.IndexOf(card) < 0) cardManagerScript.usedCards.Add(card);
         cardActive = false;
     }
 

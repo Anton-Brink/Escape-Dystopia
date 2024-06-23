@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [CreateAssetMenu]
+[System.Serializable]
 public class Item : ScriptableObject
 {
-    public string itemName = "";
-    public string itemEffect = "";
-    public Sprite itemImage;
-    public string runType = "";
-    public int uses = -1;
+    [SerializeField]  public string itemName = "";
+    [SerializeField] public string itemEffect = "";
+    [SerializeField] public Sprite itemImage;
+    [SerializeField] public string imagePath = "Assets/BackgroundTestSceneAssets/Assets/Images and Icons/Items/Top Hat.png";
+    [SerializeField] public string runType = "";
+    [SerializeField] public int uses = -1;
+    [SerializeField] public int price = 100;
+
 }

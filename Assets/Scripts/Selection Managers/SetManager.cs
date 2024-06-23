@@ -9,13 +9,13 @@ public class SetManager : MonoBehaviour
     public GameObject[] playerHands;
     public Set[] playerSets;
     private int setNumber = -1;
-    private SceneManagerScript sceneManagerScript;
+    private CardManager cardManagerScript;
     private int previousCardLimit = 0; //this keeps track of the previous card limit so we know which hand to disable
 
     // Start is called before the first frame update
     void Start()
     {
-        sceneManagerScript = GameObject.Find("SceneManager").GetComponent<SceneManagerScript>();
+        cardManagerScript = GameObject.Find("CardManager").GetComponent<CardManager>();
         //set cardArrays
         switchPlayerSet();
     }
@@ -23,7 +23,6 @@ public class SetManager : MonoBehaviour
 
     public void switchPlayerSet()
     {
-        Debug.Log("setNumber: " + setNumber);
         if(setNumber < 0 || setNumber > 2) previousCardLimit = 0;//if set number is out of the valid range set the previous card limit to 0
         else previousCardLimit = playerSets[setNumber].cardLimit - 1; //-1 because you have to subtract once for the previous card
 
@@ -47,7 +46,6 @@ public class SetManager : MonoBehaviour
         if (cardLimit <= 5 && cardLimit >= 1)
         {
             //set the previous active player hand to inactive
-            Debug.Log(previousCardLimit);
             if (previousCardLimit >= 1)
             {
                 int disableIndex = previousCardLimit - 1;
@@ -64,12 +62,12 @@ public class SetManager : MonoBehaviour
             //set the active hand to the current set's card limit
             playerHands[cardLimit - 1].SetActive(true);
 
-            sceneManagerScript.cards.Clear();
+            cardManagerScript.cards.Clear();
             foreach (Transform child in playerHands[cardLimit - 1].transform)
             {
                 if (child.gameObject)
                 {
-                    sceneManagerScript.cards.Add(child.gameObject);
+                    cardManagerScript.cards.Add(child.gameObject);
                 }
             }
             //set the hexagon card ui script values

@@ -17,8 +17,12 @@ public class EnemyUIScript : MonoBehaviour
     public bool enemyAlive = true;
 
     //scene variables
-    private GameObject sceneManager;
-    private SceneManagerScript sceneManagerScript;
+    private GameObject combatManager;
+    private CombatManager combatManagerScript;
+
+    private GameObject cardManager;
+    private CardManager cardManagerScript;
+
 
 
 
@@ -29,8 +33,10 @@ public class EnemyUIScript : MonoBehaviour
         enemy = Enemy.Instantiate(enemyAsset);
         healthSlider.maxValue = enemy.enemyHealth;
         healthSlider.value = enemy.enemyHealth;
-        sceneManager = GameObject.Find("SceneManager");
-        sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
+        combatManager = GameObject.Find("CombatManager");
+        combatManagerScript = combatManager.GetComponent<CombatManager>();
+        cardManager = GameObject.Find("CardManager");
+        cardManagerScript = cardManager.GetComponent<CardManager>();
         enemyHealthText.text = enemy.enemyHealth.ToString() + "/" + healthSlider.maxValue.ToString();
         playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
     }
@@ -39,7 +45,7 @@ public class EnemyUIScript : MonoBehaviour
     {
         enemyAlive = false;
         gameObject.SetActive(false);
-        sceneManagerScript.checkEnemies();
+        combatManagerScript.checkEnemies();
     }
 
     private void OnMouseDown()
@@ -47,6 +53,8 @@ public class EnemyUIScript : MonoBehaviour
         CardUIScript activeCard = GetActiveCard();
         if (activeCard != null)
         {
+            activeCard.DeactivateCard();
+            playerScript.setPower(playerScript.getPower() - activeCard.card.powerCost);
             enemy.enemyHealth -= activeCard.card.cardDamage;
             if (enemy.enemyHealth <= 0)
             {
@@ -57,14 +65,12 @@ public class EnemyUIScript : MonoBehaviour
                 healthSlider.value = enemy.enemyHealth;
                 enemyHealthText.text = enemy.enemyHealth.ToString() + "/" + healthSlider.maxValue.ToString();
             }
-            activeCard.DeactivateCard();
-            playerScript.setPower(playerScript.getPower() - activeCard.card.powerCost);
         }
     }
 
     private CardUIScript GetActiveCard()
     {
-        foreach (var card in sceneManagerScript.cards)
+        foreach (var card in cardManagerScript.cards)
         {
             CardUIScript cardScript = card.GetComponent<CardUIScript>();
             if (cardScript.cardActive) return cardScript;

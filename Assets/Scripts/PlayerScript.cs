@@ -9,8 +9,10 @@ using UnityEngine.UI;
 
 public class PlayerScript : Subject
 {
+    public static PlayerScript Instance { get; private set; }
+
     //playerstats
-    private int characterHealth = 100;
+    private int characterHealth = 0;
     private int characterMaxHealth = 100;
     private int characterPower = 0;
     private int characterMaxPower = 5;
@@ -25,8 +27,68 @@ public class PlayerScript : Subject
     // Start is called before the first frame update
     void Awake()
     {
-        //set player stats and UI info
-        setPower(characterMaxPower);
+        
+        //persistence stuff
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Destroy duplicate
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Persist across scenes
+
+        Debug.Log("Init");
+
+        //set/get player stats
+        if (!PlayerPrefs.HasKey("maxHealth"))
+        {
+            setMaxHealth(characterMaxHealth);
+        }
+        else
+        {
+            setMaxHealth(PlayerPrefs.GetInt("maxHealth"));
+        }
+        
+        if (!PlayerPrefs.HasKey("maxPower"))
+        {
+            setMaxPower(characterMaxPower);
+        }
+        else
+        {
+            setMaxPower(PlayerPrefs.GetInt("maxPower"));
+        }
+        
+        if (!PlayerPrefs.HasKey("baseCharacterMaxPower"))
+        {
+            setBasePower(baseCharacterMaxPower);
+        }
+        else
+        {
+            setBasePower(PlayerPrefs.GetInt("baseCharacterMaxPower"));
+        }
+
+
+        if (!PlayerPrefs.HasKey("power"))
+        {
+            setPower(characterMaxPower);
+        }
+        else
+        {
+            setPower(PlayerPrefs.GetInt("power"));
+        }
+
+        if (!PlayerPrefs.HasKey("health"))
+        {
+            setHealth(characterMaxHealth);
+        }
+        else
+        {
+            //setHealth(PlayerPrefs.GetInt("health"));
+            setHealth(characterMaxHealth);
+        }
+
+        //set player UI info
         playerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
@@ -41,6 +103,7 @@ public class PlayerScript : Subject
     {
         characterPower = power;
         NotifyStatObservers(power, "power");
+        Debug.Log("new power: " + getPower());
     }
 
     public int getPower()
@@ -51,6 +114,7 @@ public class PlayerScript : Subject
     public void setBasePower(int power)
     {
         baseCharacterMaxPower = power;
+        NotifyStatObservers(power, "basePower");
     }
 
     public int getBasePower()
@@ -74,6 +138,7 @@ public class PlayerScript : Subject
     public void setHealth(int health)
     {
         characterHealth = health;
+        Debug.Log("Enter with health: " + health);
         NotifyStatObservers(health, "health");
     }
 
@@ -85,6 +150,7 @@ public class PlayerScript : Subject
     public void setMaxPower(int maxPower)
     { 
         characterMaxPower = maxPower;
+        NotifyStatObservers(maxPower, "maxPower");
     }
 
     public SpriteRenderer getPlayerSpriteRenderer()

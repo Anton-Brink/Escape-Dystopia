@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.Actions.MenuPriority;
+using System.IO;
+using System;
+using static UnityEditor.Progress;
 
+[System.Serializable]
 public class ItemManager : MonoBehaviour
 {
-
-    private List<Item> playerItems = new List<Item>();
+    [SerializeField] public List<Item> playerItems = new List<Item>();
     private Vector2 imageSize = new Vector2(40f, 40f);
     public GameObject player;
     private PlayerScript playerScript;
@@ -17,8 +19,8 @@ public class ItemManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerScript = player.GetComponent<PlayerScript>();
-        setManagerScript = setManager.GetComponent<SetManager>();
+        LoadItemList();
+        LoadItemGameObjects();
     }
 
     // Update is called once per frame
@@ -42,6 +44,7 @@ public class ItemManager : MonoBehaviour
                 itemGameObjects[i].transform.position = new Vector2((itemGameObjects.Count - 1) * 40 + (-410), 0);
             }
         }
+        saveItemsToList();
     }
 
     // add item to top of screen and to player items so it can be used or viewed
@@ -78,14 +81,14 @@ public class ItemManager : MonoBehaviour
             Debug.Log("Could not retrieve item image");
             // add code for default image
         }
+        saveItemsToList();
     }
     // check which items have a per turn effect and run them
     public void applyPerTurnItemEffects()
     {
+        playerScript = player.GetComponent<PlayerScript>();
         for (int i = 0; i < playerItems.Count; i++)
         {
-            Debug.Log(playerItems[i].runType);
-            Debug.Log(playerItems[i].itemName);
             if (playerItems[i].runType == "repeatItem")
             {
                 switch (playerItems[i].itemName)
@@ -103,6 +106,8 @@ public class ItemManager : MonoBehaviour
     // use consumable item and remove from inventory
     public void applyConsumableItemEffect(Item item, GameObject itemGameObject) 
     {
+        setManagerScript = setManager.GetComponent<SetManager>();
+        playerScript = player.GetComponent<PlayerScript>();
         switch (item.name)
         {
             case "Bloody Machine":
@@ -132,6 +137,73 @@ public class ItemManager : MonoBehaviour
             tooltipComponent.removeTooltip();
             Destroy(itemGameObject);
             updateItems();
+        }
+    }
+
+    public void saveItemsToList()
+    {
+        JsonFunctions.SaveScriptableObjects(playerItems, "playerItems.txt");
+    }
+
+    public void LoadItemList()
+    {
+        string filePath = Application.persistentDataPath + "/playerItems.txt";
+        if (File.Exists(filePath))
+        {
+            playerItems = JsonFunctions.LoadScriptableObjects<Item>("playerItems.txt");
+        }
+        else
+        {
+            Debug.Log("Path does not exist");
+            playerItems = new List<Item>();
+        }
+    }
+
+    private void LoadItemGameObjects() 
+    {
+        if (playerItems.Count > 0)
+        {
+            int totalItems = 0;
+            foreach (Item item in playerItems)
+            {
+                totalItems++;
+                Sprite itemSprite = item.itemImage;
+                if (itemSprite != null)
+                {
+                    GameObject imageObject = new GameObject("itemImage" + totalItems);
+                    Image image = imageObject.AddComponent<Image>();
+                    try
+                    {
+                        image.sprite = itemSprite;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e);
+                    }
+                    imageObject.transform.position = new Vector2((totalItems - 1) * 40 + (-410), 0);
+                    RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
+                    rectTransform.sizeDelta = new Vector2(imageSize.x, imageSize.y);
+                    imageObject.transform.SetParent(transform, false);
+                    System.Type tooltipScript = System.Type.GetType("TooltipTrigger");
+                    if (tooltipScript != null)
+                    {
+                        imageObject.AddComponent(tooltipScript);
+                        imageObject.GetComponent<TooltipTrigger>().header = item.itemName;
+                        imageObject.GetComponent<TooltipTrigger>().body = item.itemEffect;
+                    }
+                    if (item.runType == "consumableItem")
+                    {
+                        Button buttonComponent = imageObject.AddComponent<Button>();
+                        buttonComponent.onClick.AddListener(() => applyConsumableItemEffect(item, imageObject));
+                    }
+                    itemGameObjects.Add(imageObject);
+                }
+                else
+                {
+                    Debug.Log("Could not retrieve item image");
+                    // add code for default image
+                }
+            }
         }
     }
 }

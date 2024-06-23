@@ -15,5 +15,7 @@ MonoBehaviour:
   itemName: More Power
   itemEffect: Start each round with 1 Additional power
   itemImage: {fileID: 21300000, guid: 374643871a39dd44880f1c0eff14f46c, type: 3}
+  imagePath: Packages/com.unity.2d.animation/Editor/Assets/SkinningModule/Icons/Selected/Create_Edge@3x.png
   runType: repeatItem
   uses: -1
+  price: 200

@@ -13,8 +13,6 @@ using UnityEngine.UI;
 public class VictoryScreenScript : MonoBehaviour
 {
     //Access Stuff
-    public GameObject sceneManager;
-    SceneManagerScript sceneManagerScript;
     PlayerScript playerScript;
     private GameObject player;
     public GameObject statGameObject;
@@ -35,7 +33,12 @@ public class VictoryScreenScript : MonoBehaviour
     private Set randSet;
     SetManager setManager;
     ItemManager itemManager;
-    
+    InfoScript infoScript;
+    public GameObject infoManager;
+    public GameObject sceneManager;
+    private SceneManagerScript sceneManagerScript;
+    public RoundData roundData;
+
 
 
     private GameObject selectedElement;
@@ -74,9 +77,31 @@ public class VictoryScreenScript : MonoBehaviour
                 }
                 break;
         }
-        sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
+        //add base amount of money
+        infoScript = infoManager.GetComponent<InfoScript>();
+        infoScript.addMoney(100);
         gameObject.SetActive(false);
-        sceneManagerScript.loadStartFight();
+        sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
+        roundData.pathRound += 1;
+        string nextPathCheckpoint;
+        nextPathCheckpoint = roundData.path[roundData.pathRound];
+        switch (nextPathCheckpoint)
+        {
+            case "Normal":
+            case "Elite":
+            case "Boss":
+                sceneManagerScript.loadScene("Combat");
+                break;
+            case "Shop":
+                sceneManagerScript.loadScene("Shop");
+                break;
+            case "Rest":
+                sceneManagerScript.loadScene("Rest");
+                break;
+            default:
+                sceneManagerScript.loadScene("Path Selection");
+                break;
+        }
         //sceneManagerScript.transition();
     }
 
@@ -114,6 +139,7 @@ public class VictoryScreenScript : MonoBehaviour
         }
         randItem = items[rand.Next(0, items.Length)];
         itemText.text = randItem.name;
+        itemImage.sprite = randItem.itemImage;
         itemGameObject.GetComponent<TooltipTrigger>().header = randItem.name;
         itemGameObject.GetComponent<TooltipTrigger>().body = randItem.itemEffect;
         //get random stats to buff

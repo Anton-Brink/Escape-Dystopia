@@ -16,9 +16,8 @@ public abstract class Subject : MonoBehaviour
     }
     protected void NotifyStatObservers(int changeAmount, string statName)
     {
-        Debug.Log("enter notify stat observers");
-        Debug.Log(changeAmount);
-        Debug.Log(statName);
+        Debug.Log("Eneter Notify Stat Observers");
+        Debug.Log(statObservers.Count);
         statObservers.ForEach(observer => observer.statChange(changeAmount, statName));
     }
 }
