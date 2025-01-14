@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
+[System.Serializable]
 public class SetManager : MonoBehaviour
 {
     //player card management
     public GameObject[] playerHands;
-    public Set[] playerSets;
+    [SerializeField] public List<Set> playerSets;
     private int setNumber = -1;
     private CardManager cardManagerScript;
     private int previousCardLimit = 0; //this keeps track of the previous card limit so we know which hand to disable
@@ -16,6 +18,8 @@ public class SetManager : MonoBehaviour
     void Start()
     {
         cardManagerScript = GameObject.Find("CardManager").GetComponent<CardManager>();
+        getSavedPlayerSets();
+        //saveSets();
         //set cardArrays
         switchPlayerSet();
     }
@@ -23,8 +27,8 @@ public class SetManager : MonoBehaviour
 
     public void switchPlayerSet()
     {
-        if(setNumber < 0 || setNumber > 2) previousCardLimit = 0;//if set number is out of the valid range set the previous card limit to 0
-        else previousCardLimit = playerSets[setNumber].cardLimit - 1; //-1 because you have to subtract once for the previous card
+        if (setNumber < 0 || setNumber > 2) previousCardLimit = 0;//if set number is out of the valid range set the previous card limit to 0
+        else previousCardLimit = playerSets[setNumber].cardLimit;
 
         if (setNumber == 2) setNumber = 0;
         else setNumber++;
@@ -49,6 +53,7 @@ public class SetManager : MonoBehaviour
             if (previousCardLimit >= 1)
             {
                 int disableIndex = previousCardLimit - 1;
+                Debug.Log("disableIndex: " + disableIndex);
                 playerHands[disableIndex].SetActive(false);
             }
             else
@@ -60,6 +65,7 @@ public class SetManager : MonoBehaviour
                 }
             }
             //set the active hand to the current set's card limit
+            Debug.Log("cardLimit: " + cardLimit);
             playerHands[cardLimit - 1].SetActive(true);
 
             cardManagerScript.cards.Clear();
@@ -71,12 +77,16 @@ public class SetManager : MonoBehaviour
                 }
             }
             //set the hexagon card ui script values
+            Debug.Log(playerSets[setNumber]);
+            Debug.Log(setNumber);
             setUsableCards(playerSets[setNumber].setCards, playerSets[setNumber].cardLimit);
         }
     }
 
     private void setUsableCards(Card[] setCards, int cardLimit)
     {
+        Debug.Log(setCards);
+        Debug.Log(cardLimit);
         int currentCard = cardLimit;
         //loop through the available card spots for the hand
         foreach (Transform child in playerHands[cardLimit - 1].transform)
@@ -94,7 +104,7 @@ public class SetManager : MonoBehaviour
         }
     }
 
-    public Set[] getPlayerSets() 
+    public List<Set> getPlayerSets() 
     {
         return playerSets;
     }
@@ -102,6 +112,28 @@ public class SetManager : MonoBehaviour
     public void updateSetCardLimit(Set updateSet) 
     {
         updateSet.cardLimit++;
+        saveSets();
+    }
+
+    private void getSavedPlayerSets() 
+    {
+        string filePath = Application.persistentDataPath + "/playerSets.txt";
+        if (File.Exists(filePath))
+        {
+            playerSets = JsonFunctions.LoadScriptableObjects<Set>("playerSets.txt");
+            LogList.LogItems(playerSets);
+        }
+        else
+        {
+            playerSets = new List<Set>();
+            //get sets saved like I got items in victoryscript
+            Debug.Log("Path does not exist");
+        }
+    }
+
+    public void saveSets()
+    {
+        JsonFunctions.SaveScriptableObjects(playerSets, "playerSets.txt");
     }
 
 

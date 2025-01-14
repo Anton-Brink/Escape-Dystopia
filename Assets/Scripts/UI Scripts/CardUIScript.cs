@@ -40,8 +40,6 @@ public class CardUIScript : MonoBehaviour
     {
         if (cardManagerScript.usedCards.IndexOf(card) < 0)
         {
-            Debug.Log(playerScript.getPower());
-            Debug.Log(card.powerCost);
             if (playerScript.getPower() >= card.powerCost) cardActive = true;
             else Debug.Log("Not Enough Power To Use Card");
         }

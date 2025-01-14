@@ -38,7 +38,6 @@ public class PlayerScript : Subject
         Instance = this;
         DontDestroyOnLoad(gameObject); // Persist across scenes
 
-        Debug.Log("Init");
 
         //set/get player stats
         if (!PlayerPrefs.HasKey("maxHealth"))
@@ -103,7 +102,6 @@ public class PlayerScript : Subject
     {
         characterPower = power;
         NotifyStatObservers(power, "power");
-        Debug.Log("new power: " + getPower());
     }
 
     public int getPower()
@@ -138,7 +136,6 @@ public class PlayerScript : Subject
     public void setHealth(int health)
     {
         characterHealth = health;
-        Debug.Log("Enter with health: " + health);
         NotifyStatObservers(health, "health");
     }
 

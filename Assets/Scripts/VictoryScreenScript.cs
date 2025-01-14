@@ -47,11 +47,9 @@ public class VictoryScreenScript : MonoBehaviour
     // used to handle the victory screen interaction such as character selection and closing it
     public void confirmSelection()
     {
-        Debug.Log(selectedElement);
         switch (selectedElement.name)
         {
             case "Item":
-                Debug.Log(randItem);
                 itemManager = GameObject.Find("Item Canvas").GetComponent<ItemManager>();
                 itemManager.addItem(randItem);
                 break;
@@ -84,6 +82,7 @@ public class VictoryScreenScript : MonoBehaviour
         sceneManagerScript = sceneManager.GetComponent<SceneManagerScript>();
         roundData.pathRound += 1;
         string nextPathCheckpoint;
+        if (roundData.pathRound > roundData.path.Length) sceneManagerScript.loadScene("The End");
         nextPathCheckpoint = roundData.path[roundData.pathRound];
         switch (nextPathCheckpoint)
         {
@@ -118,15 +117,14 @@ public class VictoryScreenScript : MonoBehaviour
         //get random set to improve
         System.Random rand = new System.Random();
         
-        randSet = setManager.getPlayerSets()[rand.Next(0, setManager.getPlayerSets().Length)];
-        componentText.text = randSet.name;
+        randSet = setManager.getPlayerSets()[rand.Next(0, setManager.getPlayerSets().Count)];
+        componentText.text = randSet.setName;
         componentImage.sprite = randSet.setImage;
-        componentGameObject.GetComponent<TooltipTrigger>().header = randSet.name;
+        componentGameObject.GetComponent<TooltipTrigger>().header = randSet.setName;
         //get random item to add
 
         string[] scriptableItemObjects = AssetDatabase.FindAssets("t:Item", new[] { "Assets/BackgroundTestSceneAssets/Sprites/Items" });
         int itemCount = scriptableItemObjects.Length;
-        Debug.Log(itemCount);
         Item[] items = new Item[itemCount];
         for (int i = 0; i < itemCount; i++)
         {

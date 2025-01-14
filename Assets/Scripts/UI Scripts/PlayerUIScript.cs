@@ -51,7 +51,6 @@ public class PlayerUIScript : MonoBehaviour, StatObserver
     {
         if (subject != null)
         {
-            Debug.Log("Stat Observer Added");
             subject.AddStatObserver(this);
         }
     }

@@ -18,9 +18,6 @@ public class PersistenceManager : MonoBehaviour, StatObserver
     }
     public void statChange(int changeAmount, string statName)
     {
-        Debug.Log("Enter stat change");
-        Debug.Log(statName);
-        Debug.Log("CHANGE AMOUNT: " + changeAmount);
         PlayerPrefs.SetInt(statName, changeAmount);
         PlayerPrefs.Save();
     }

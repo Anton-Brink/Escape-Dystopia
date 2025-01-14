@@ -112,8 +112,8 @@ public class ItemManager : MonoBehaviour
         {
             case "Bloody Machine":
                 playerScript.setMaxHealth(playerScript.getMaxHealth() - 10);
-                Set[] playerSets = setManagerScript.getPlayerSets();
-                for (int i = 0; i < playerSets.Length; i++)
+                List<Set> playerSets = setManagerScript.getPlayerSets();
+                for (int i = 0; i < playerSets.Count; i++)
                 {
                     if (playerSets[i].cardLimit < playerSets[i].setCards.Length)
                     {
